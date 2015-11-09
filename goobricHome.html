@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
+<style>
+  #roster-select {
+    width: 250px;
+  }
+  
+  #roster-waiting {
+    width: 250px;
+  }
+
+  #assignment-select {
+    width: 250px;
+  }
+  
+  #assignment-waiting {
+    width: 250px;
+  }
+
+</style>
+<html>
+  <head>
+    </head>
+    <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">
+            Goobric Web App
+          </a>
+        </div>
+        <form class="navbar-form navbar-left">
+          <div class="form-group">
+            <select class="form-control" id="roster-waiting" disabled>
+             <option>Looking for rosters...</option>
+            </select>
+            <select class="form-control hidden" id="roster-select">
+              <option>-Select roster</option>
+            </select>
+          </div>
+        </form>
+        <form class="navbar-form navbar-left">
+          <div class="form-group">
+            <select class="form-control hidden" id="assignment-waiting" disabled>
+             <option>Looking for assignments...</option>
+            </select>
+            <select class="form-control hidden" id="assignment-select">
+            </select>
+          </div>
+        </form>
+      </div>
+     </nav>
+     <div class="container">
+       <div id="assignment" class="well">
+         A partner to the <a href="https://chrome.google.com/webstore/detail/doctopus/ffhegaddkjpkfiemhhnphmnadfbkdhbf?utm_source=permalink" target="_blank">Doctopus Add-on for Sheets</a>, the <strong>Goobric Web App</strong> creates a seamless, rubric-based assessment workflow in Google Drive.
+         <ul>
+           <li>Can ingest assignments from Google Classroom</li>
+           <li>Can also be used to set up your own rosters with a handy class Drive folder structure!</li>
+           <li>Allows for distribution of group and differentiated (leveled) assignments</li>
+         </ul>
+         Support resources
+         <ul>
+           <li>Launch the Goobric scoring panel from any Goobric-associated student doc using the <a href="https://chrome.google.com/webstore/detail/goobric-web-app-launcher/cepmakjlanepojocakadfpohnhhalfol" target="_blank">Goobric Web App Launcher</a> Chrome extension</li>
+           <li>Ask for help in the <a href="https://plus.google.com/communities/110101771178739680338" target="_blank">Doctopus / Goobric G+ Community</a>...</li>
+           <li>But not before you read the <a href="https://docs.google.com/document/d/1u65LBFiXvvYsCCgSS29pQXsDoTBpBNo0oMsOH2Lovkk/preview" target="_blank">Goobric FAQ Doc</a>;)</li>
+         </ul>
+         Goobric and Doctopus are part of a suite of free tools created by the New Visions for Public Schools 501(c)3 <a href="http://cloudlab.newvisions.org" target="_blank">CloudLab</a>
+       </div>
+       <div id="errnote" class="alert alert-warning hidden" role="alert">
+         <p>Uh oh... something isn't right.  If you are Google Classroom user, try re-ingesting or searching for new submissions from the Doctopus Add-on and this problem should fix itself...</p>
+       </div>
+     </div>
+  </body>
+</html>
+
+<script>
+$('.dropdown-toggle').dropdown();
+
+var ASSIGNMENTS = [];
+var INTERVAL_ID = 0;
+var DOCTOPUS_ID = <?= doctopusId ?>;
+var CLASSNAMES = [];
+
+google.script.run.withSuccessHandler(populateSelects).getHomeGlobal();
+
+function populateSelects(homeGlobal) {
+  var rosters = homeGlobal.rosters;
+  for (var i=0; i<rosters.length; i++) {
+    var thisOption = '<option id="' + rosters[i].className + '">' + rosters[i].className + '</option>';
+    $('#roster-select').append(thisOption);
+    CLASSNAMES.push(rosters[i].className);
+  }
+  if (DOCTOPUS_ID) {
+   $('#roster-waiting').html('').append('<option>Looking up assignment...</option>');
+    google.script.run.withSuccessHandler(prepopulateAssignment).getPropopulationValues(DOCTOPUS_ID);
+  } else if (rosters.length) {
+    $('#roster-waiting').addClass('hidden');
+    $('#roster-select').removeClass('hidden');
+  } else {
+    $('#assignment-waiting').removeClass('hidden');
+    $('#roster-waiting').html('No rosters found');
+    setDoctoLaunchInstructions(true);
+  }
+}
+
+function prepopulateAssignment(prepopValues) {
+  ASSIGNMENTS = JSON.parse(JSON.stringify(prepopValues.assignments));
+  $('#roster-waiting').addClass('hidden');
+  $('#roster-select').removeClass('hidden');
+  if (CLASSNAMES.indexOf(prepopValues.className) !== -1) {
+    $('#roster-select').val(prepopValues.className);
+  } else {
+    $('#assignment').addClass('hidden');
+    $('#errnote').removeClass('hidden');
+  }
+  refreshAssignmentSelect(prepopValues.assignments);
+  if (prepopValues.selectedIndex!==-1) {
+    $('#assignment-select').val(prepopValues.selectedIndex);
+  } else {
+    $('#assignment').addClass('hidden');
+    $('#errnote').removeClass('hidden');
+  }
+  
+  $('#assignment-select').trigger('change');
+}
+
+
+$('#roster-select').change(function() { 
+  $('#assignment-list').addClass('hidden');
+  $('#assignment-list').html('');
+  var rosterVal = $('#roster-select').val();
+  $('#assignment').html('');
+  $('#assignment').addClass('hidden');
+  if (rosterVal === "-Select roster") {
+    $('#assignment-waiting').addClass('hidden');
+  } else {
+    $('#assignment-waiting').removeClass('hidden');
+  }
+  $('#assignment-select').addClass('hidden');
+  google.script.run.withSuccessHandler(refreshAssignmentSelect).getRosterAssignments($(this).val()); 
+});
+
+
+function refreshAssignmentSelect(assignments) {
+  clearInterval(INTERVAL_ID);
+  ASSIGNMENTS = JSON.parse(JSON.stringify(assignments));
+  $('#assignment-select').html('').append('<option>-Select assignment</option>');
+  for (var i=0; i<assignments.length; i++) {
+    var thisOption = '<option value="' + i + '">' + assignments[i].name + '</option>';
+    $('#assignment-select').append(thisOption);
+  }
+  var thisRosterName = $('#roster-select').val();
+  if (thisRosterName.indexOf("Google Classroom")!==-1) {
+    var thisOption = '<option value="Ingest a Classroom assignment">Ingest a Classroom assignment</option>';
+    $('#assignment-select').append(thisOption);
+  } else {
+    var thisOption = '<option value="Ingest a Classroom assignment">Create new Doctopus assignment</option>';
+    $('#assignment-select').append(thisOption);
+  }
+  $('#assignment-waiting').addClass('hidden');
+  $('#assignment-select').removeClass('hidden');
+}
+
+
+$('#assignment-select').change(function() {
+  clearInterval(INTERVAL_ID);
+  INTERVAL_ID = 0;
+  var assignmentIndex = $('#assignment-select').val();
+  if (assignmentIndex === '-Select assignment') {
+    $('#assignment').html('');
+    $('#assignment').addClass('hidden');
+  } else if ((assignmentIndex == "Ingest a Classroom assignment")||(assignmentIndex == "Create new Doctopus assignment")) { 
+    setDoctoLaunchInstructions();
+  } else {
+    var assignment = ASSIGNMENTS[assignmentIndex]
+    google.script.run.withSuccessHandler(refreshAssignmentPanel).getAssignmentDetails(assignment);
+  } 
+});
+
+function refreshAssignmentPanel(assignment) {
+   if (INTERVAL_ID) {
+     clearInterval(INTERVAL_ID);
+   }
+   $('#assignment').html('');
+   $('#assignment').removeClass('hidden')
+   renderAssignmentHtml(assignment)
+   INTERVAL_ID = setInterval(function() {
+     google.script.run.withSuccessHandler(renderAssignmentHtml).getAssignmentDetails(assignment, INTERVAL_ID);
+   }, 3000);
+}
+
+function renderAssignmentHtml(assignment) {
+  if ((assignment.intervalId)&&(assignment.intervalId !== INTERVAL_ID)) {
+    return;
+  }
+  var html = '';
+  if ((!assignment.details)||(!assignment.details.length)) {
+    html += "<p>This Doctopus assignment Sheet is either not accessible to you, it contains incomplete information, or it may be trashed...</p>";
+    html += '<p>Doctopus Sheet: <a href="https://docs.google.com/spreadsheets/d/' + assignment.ssKey + '" target="_blank">' + assignment.name + '</a></p>';
+    $('#assignment').html(html);
+    return;
+  }
+  if ((assignment.rubricId)||(assignment.rubrics)) {
+    html += '<p>Doctopus Sheet: <a href="https://docs.google.com/spreadsheets/d/' + assignment.ssKey + '" target="_blank">' + assignment.name + '</a></p>';
+    html += '<p>Rubric: <a href="https://docs.google.com/spreadsheets/d/' + assignment.rubricId + '" target="_blank">' + assignment.rubricName + '</a></p>';
+  } else {
+    html += "<p>This assignment has no rubric attached. Launch Doctopus from the <strong>Add-ons</strong> menu in the Doctopus sheet to add a rubric.</p>";
+    html += "<p><strong>Important:</strong> Google Classroom users -- if this seems wrong, try searching for new submissions and/or re-attaching Goobric.</p>";
+    html += '<p>Doctopus Sheet: <a href="https://docs.google.com/spreadsheets/d/' + assignment.ssKey + '" target="_blank">' + assignment.name + '</a></p>';
+    $('#assignment').html(html);
+    return;
+  }
+  var details = assignment.details;
+  html += '<table class="table">';
+  html += '<tr><th>First Name</th><th>Last Name</th><th>Scoring link</th><th>Score count</th><th>Scores last submitted</th></tr>';
+  for (var i=0; i<details.length; i++) {
+    html += "<tr><td>" + details[i].firstName + "</td><td>" + details[i].lastName + '</td><td><a href="' + details[i].goobricLink + '" target="_blank">' + details[i].fileName + "</a></td><td>" + details[i].count + "</td><td>" + details[i].lastSubmitted + "</td></tr>";
+  }
+  html += '</table>';
+  $('#assignment').html(html);
+}
+
+
+function setDoctoLaunchInstructions(optAppend) {
+  if ((assignment.intervalId)&&(assignment.intervalId !== INTERVAL_ID)) {
+    return;
+  }
+  $('#assignment').removeClass('hidden');
+  var html = 'To create Doctopus rosters, distribute a Doctopus assignment, or to ingest a Google Classroom assignment, use the <a href="https://chrome.google.com/webstore/detail/doctopus/ffhegaddkjpkfiemhhnphmnadfbkdhbf?utm_source=permalink" target="_blank">Doctopus Add-on for Sheets.</a>';
+  html += '<p></p><p><a class="btn btn-primary" href="https://docs.google.com/spreadsheets/create" target="_blank" role="button">Launch new Sheet</a></p>';
+  html += '<p></p><p>Once the sheet has launched, open Doctopus from the <strong>Add-ons</strong> menu</p>';
+  if (optAppend) {
+    $('#assignment').append(html);
+  } else {
+    $('#assignment').html(html);
+  }
+}
+
+</script>
+

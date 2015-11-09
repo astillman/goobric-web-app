@@ -1,0 +1,2093 @@
+<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">
+<?!= include('layout.css'); ?>
+<?!= include('jquery-ui.css'); ?>
+<?!= include('fixed-table-theme.css'); ?>
+
+
+<script>
+var docId = <?=docId?>;
+</script>
+
+
+<style>
+
+table {
+  border-spacing: 0px;
+}
+
+
+
+.rubric-table td {
+  border: 1px solid lightgrey;
+  font-size: 10px;
+  padding: 5px;
+  margin-bottom: 5px;
+}
+
+
+td.rubric-score {
+  padding: 5px;
+  text-align: center;
+}
+
+th.rubric-score {
+  text-align: center;
+  border-right: 1px solid lightgrey;
+}
+
+td.rubric-descriptor {
+  vertical-align: top;
+}
+
+td.rubric-descriptor-full {
+  vertical-align: top;
+}
+
+div.rubric-descriptor {
+  padding: 5px;
+  height: auto;
+  overflow: hidden;
+  min-height: 85px;
+}
+
+div.rubric-descriptor-full {
+  padding: 5px;
+  overflow: hidden;
+}
+
+
+#tabs a {
+  font-size: 12px;
+  padding-left: 10px;
+  padding-top: .3em;
+  padding-bottom: 0px;
+  min-height: 20px;
+}
+
+
+
+.score-input {
+ width: 30px;
+ background-color: white;
+}
+
+
+#tabs {
+ width: 98%;
+ margin: 0px;
+}
+
+#button-panel {
+  position: relative;
+  margin: 5px;
+  padding-left: 5px;
+  margin-right: 35px;
+  margin-top: 15px;
+  height: 90%;
+}
+
+#button-cell {
+  vertical-align: top;
+}
+
+#rubric-cell {
+  vertical-align: top;
+}
+
+tr:last-child > td, tr:last-child > th {
+  border-bottom: 1px solid lightgrey;
+}
+
+.ui-layout-north {
+  padding: 0px;
+}
+
+.layout-table {
+
+}
+
+.layout-table tr:last-child > td, tr:last-child > th {
+  border-bottom: 0px;
+}
+
+.layout-table td {
+  padding: 0px;
+  
+}
+
+.rubric-table tr:last-child > td, tr:last-child > th {
+  border-bottom: 1px solid lightgrey;
+}
+
+.rubric-table {
+  min-height: 85px;
+  width: 100%;
+}
+
+#email-authors-container {
+  margin-top: 5px;
+  font-size: 12px;
+}
+
+#viewer-to-commenter-container {
+  margin-top: 5px;
+  font-size: 12px;
+}
+
+#button-container {
+  position: absolute;
+  margin-top: 10px;
+}
+
+.ui-tabs .ui-tabs-nav {
+  margin: 0;
+  padding: .2em .2em 0;
+  padding-top: 0.2em;
+  padding-bottom: 0px;
+  padding-left: 0.2em;
+  padding-right: 40px;
+}
+
+
+.deselected-tabs-anchor:after {
+  content: "";
+  position: absolute;
+  right: 0px;
+  height: 96%;
+  width: 20px;
+  background: linear-gradient(to right, rgba(0,0,0,0), #e6e6e6);
+  background: -webkit-linear-gradient(left, rgba(0,0,0,0), #e6e6e6); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(right, rgba(0,0,0,0), #e6e6e6); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(right, rgba(0,0,0,0), #e6e6e6); /* For Firefox 3.6 to 15 */
+}
+
+.deselected-tabs-anchor:hover:after {
+  background: linear-gradient(to right, rgba(0,0,0,0), #dadada);
+  background: -webkit-linear-gradient(left, rgba(0,0,0,0), #dadada); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(right, rgba(0,0,0,0), #dadada); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(right, rgba(0,0,0,0), #dadada); /* For Firefox 3.6 to 15 */
+}
+
+.ui-icon.ui-icon-myCloseButton {
+    background-image: url('https://googledrive.com/host/0B2-Pf-O8LZyGNHpxWmhOemVYdXM/minimize.png');
+    background-size: 20px 20px;
+    width: 25px;
+    height: 25px;
+}
+
+
+.ui-icon.ui-icon-myOpenButton {
+    background-image: url('https://googledrive.com/host/0B2-Pf-O8LZyGNHpxWmhOemVYdXM/expand.png');
+    background-size: 20px 20px;
+    width: 25px;
+    height: 25px;
+}
+
+.myOpenButton {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+.ui-dialog .ui-dialog-titlebar-close {
+  position: absolute;
+  right: .3em;
+  top: 50%;
+  width: 20px;
+  margin: -15px 0 0 0;
+  padding: 1px;
+  height: 30px;
+}
+
+.comment-textarea {
+  resize: both;
+  overflow: auto;
+  width: 90%;
+}
+
+.comments {
+  font-size: 12px;
+}
+
+.ui-tabs .ui-tabs-panel {
+display: block;
+border-width: 0;
+padding: 0px;
+background: none;
+}
+
+#test-button {
+ position: relative;
+ top: 100px;
+ left: 0px;
+}
+
+#author-emails {
+  color: grey;
+}
+
+#author-emails:hover {
+  color: black;
+}
+
+
+.invisible {
+  visibility: hidden;
+}
+
+
+.ui-button .ui-icon.open-dialog {
+    background-image: url(https://googledrive.com/host/0B2-Pf-O8LZyGNHpxWmhOemVYdXM/expand.png);
+    width: 25px;
+    height: 25px;
+    min-width: 40px;
+}
+
+.ui-button .ui-icon.close-dialog {
+    background-image: url(https://googledrive.com/host/0B2-Pf-O8LZyGNHpxWmhOemVYdXM/minimize.png);
+    width: 25px;
+    height: 25px; 
+    min-width: 40px;
+}
+
+.ui-button-icon-only .ui-icon {
+left: 30%;
+margin-left: -8px;
+top: 27%;
+}
+
+button {
+  min-width: 40px;
+}
+
+.jump {
+  min-width: 80px;
+  max-width: 140px;
+  font-weight: bold;
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+
+.ui-layout-pane {
+  padding: 0px;
+  border: 0px;
+}
+
+.skill-strand {
+  text-align: right;
+  vertical-align: middle;
+  background: white;
+  padding: 5px;
+}
+
+#full-rubric {
+  font-size: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+.hover {
+  background-color: whitesmoke;
+}
+
+
+#saving-info-hover-target {
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  margin-left: -12%;
+  min-width: 150px;
+  min-height: 10px;
+  }
+  
+#last-saved-info { 
+  padding: 2px;
+  font-size: 10px;
+  border-left: 1px solid lightgrey;
+  border-right: 1px solid lightgrey;
+  border-bottom: 1px solid lightgrey;
+  border-bottom-left-radius: 5px; 
+  border-bottom-right-radius: 5px;  
+  max-width: 450px;
+  z-index: 150;
+}
+
+#saving-info { 
+  position: absolute;
+  top: 0px;
+  left: 2px;
+  min-width: 100px;
+  min-height: 20px;
+  padding: 2px;
+  background-color: white;
+  font-size: 10px;
+  border-bottom-right-radius: 5px;
+  max-width: 250px;
+  z-index: 150;
+}
+
+div.comments-container.comments {
+  width: 100%;
+  top: 5px;
+  left: 5px;
+}
+
+.rubric-button-container {
+  position: absolute;
+  top: 10px;
+  right: 25px;
+  height: 20px;
+  width: 20px;
+}
+
+#doctopus-link {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  padding: 3px;
+  font-size: 10px;
+  background-color: white;
+  border-top-left-radius: 3px;
+}
+
+#record-pause-stop {
+  position: absolute;
+  top: 0px;
+  right: 40px;
+  background-color: white;
+  border-left: 1px solid grey;
+  border-bottom: 1px solid grey;
+  border-right: 1px solid grey;
+  height: 25px;
+  width: 80px;
+  z-index: 150;
+}
+
+#audio-disabled {
+  font-size: 10px;
+  padding: 3px;
+}
+
+
+#record {
+  width: 25px;
+  height: 25px;
+  background-image: url("https://storage.googleapis.com/goobric-icons/record-25x25.png");
+  background-color: white;
+  position: relative;
+  display: block;
+  float: left;
+  padding-left: 2px;
+}
+
+
+#pause {
+  width: 25px;
+  height: 25px;
+  background-image: url("https://storage.googleapis.com/goobric-icons/pause-25x25.png");
+  background-color: white;
+  position: relative;
+  display: block;
+  float: left;
+  opacity: 0.5;
+}
+
+
+#stop {
+  width: 25px;
+  height: 25px;
+  background-image: url("https://storage.googleapis.com/goobric-icons/stop-25x25.png");
+  background-color: white;
+  position: relative;
+  display: block;
+  float: left;
+  padding-right: 3px;
+  opacity: 0.5;
+}
+
+.trash-audio-file {
+  width: 25px;
+  height: 25px;
+  background-image: url("https://storage.googleapis.com/goobric-icons/trash-25x25.png");
+  position: relative;
+  display: block;
+  margin: 0px auto;
+}
+
+
+.play-audio-file {
+  width: 25px;
+  height: 25px;
+  background-image: url("https://storage.googleapis.com/goobric-icons/play-25x25.png");
+  position: relative;
+  display: block;
+  margin: 0px auto;
+}
+
+
+
+.trash-audio-file2 {
+  width: 25px;
+  height: 25px;
+  background-image: url("https://storage.googleapis.com/goobric-icons/trash-25x25.png");
+  position: relative;
+  display: block;
+  float: left;
+}
+
+.upload-audio-file {
+  width: 25px;
+  height: 25px;
+  background-image: url("https://storage.googleapis.com/goobric-icons/drive-25x25.png");
+  position: relative;
+  display: block;
+  float: right;
+}
+
+
+.upload-drive {
+  width: 25px;
+  height: 38px;
+  background-image: url("https://storage.googleapis.com/goobric-icons/upload-drive.png");
+  position: relative;
+  display: block;
+  margin: 0px auto;
+}
+
+
+.padded-link {
+  padding: 5px;
+}
+
+
+audio {
+  width: 225px;
+}
+
+.audio-file {
+  margin-top:10px;
+}
+
+#recordings-panel {
+  position: absolute;
+  top: 0px;
+  height: 100%
+  background-color: white;
+}
+
+#recording-preview-table {
+  border: 0px;
+  padding: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  vertical-align: middle;
+  height: 140px;
+}
+
+#recording-preview-table tr:last-child > td, tr:last-child > th {
+  border-bottom: 0px;
+}
+
+#recording-preview-table td {
+  border-bottom: 0px;
+  border-radius: 5px;
+}
+
+#recording-preview {
+ display: block;
+ width: 100%;
+ height: 100%;
+}
+
+.centered {
+  text-align: center;
+}
+
+
+.hover-cell {
+  padding: 5px;
+}
+
+.hover-cell:hover {
+  background-color: #E8E8E8;
+}
+
+#new-recordings {
+  margin: 0px 0px;
+}
+
+#old-recordings {
+  margin-left: 5px;
+}
+
+#new-recordings tr:last-child > td, tr:last-child > th {
+  border-bottom: 0px;
+}
+
+#new-recordings td {
+  border-bottom: 0px;
+  border-radius: 5px;
+  padding: 3px;
+  font-size: 12px;
+}
+
+#new-recording-div {
+  font-size: 12px;
+  border: 1px solid grey;
+  padding: 4px;
+  border-radius: 2px;
+  background-color: white;
+  margin-top: 10px
+}
+
+#old-recordings tr:last-child > td, tr:last-child > th {
+  border-bottom: 0px;
+}
+
+#old-recordings td {
+  border-bottom: 0px;
+  border-radius: 5px;
+  padding: 3px;
+  font-size: 12px;
+}
+
+#old-recording-header {
+  margin-top: 10px;
+  margin-left: 5px;
+  font-size: 12px;
+}
+
+#recording-waiting {
+  width: 100%;
+  height: 100%;
+}
+
+#recording-spinner {
+  position: absolute;
+  top: 50%;
+  margin-top: -15%;
+  margin-left: 33%;
+}
+
+#uploading-to-drive {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  font-size: 12px;
+}
+
+#no-associations {
+  margin: 25px;
+}
+
+#no-associations td {
+ padding: 10px;
+}
+
+#auto-advance-container {
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.ui-layout-center {
+  overflow: hidden;
+}
+
+.hoverbold:hover {
+  font-weight: bold;
+  text-shadow: 0 0 0.2em #8F7;
+}
+
+</style>
+
+
+
+<script>
+/////RECORDER//////////
+///////////////////////
+
+    //globals for audio
+    var upload_url = '';
+    var audio_context;
+    var recorder;
+    var fileNameRoot = "Audio_File_";
+    var fileIndex = 0;
+    var blobs = {};
+    var thisRecordingId = '';
+    var thisFileName = 'Unknown';
+    
+    function startUserMedia(stream) {
+      audioEnabled = true;
+      initRecordingButtons();
+      var input = audio_context.createMediaStreamSource(stream);
+      recorder = new Recorder(input);
+    }
+    
+    function initRecordingButtons() {
+      $('#record-pause-stop').toggle(true);
+      $('#record').click(startRecording);  
+      $('#record').hover(buttonHover, buttonHoverOff);
+    }
+    
+    function buttonHover() {
+      $(this).css({'background-color': '#E8E8E8'});
+    }
+    
+    function buttonHoverOff() {
+      $(this).css({'background-color': 'white'});
+    }
+    
+    function startRecording() {
+      $('#recording-waiting').toggle(true);
+      recorder && recorder.record();
+      $('#recording-preview').toggle(true);
+      $('#button-panel').toggle(false);
+      $(this).unbind().css({"background-color":"#FF3333"});
+      $('#pause').css({"opacity":"1","background-color":"white"}).unbind().hover(buttonHover, buttonHoverOff).click(pauseRecording);
+      $('#stop').css({"opacity":"1","background-color":"white"}).unbind().hover(buttonHover, buttonHoverOff).click(stopRecording);
+    }
+    
+    function pauseRecording() {
+       recorder && recorder.stop();
+       $('#record').css({"background-color":"white"});
+       $('#record').unbind().hover(buttonHover, buttonHoverOff).click(startRecording); 
+       $(this).css({"background-color":"#C0C0C0"}).unbind();
+       $('#stop').css({"opacity":"1", "background-color":"white"}).unbind().click(stopRecording).hover(buttonHover, buttonHoverOff);
+    }
+    
+    function stopRecording() {
+      $('#recording-waiting').toggle(false);
+      recorder && recorder.stop();
+      $('#record').css({"background-color":"white"});
+      $('#record').unbind().hover(buttonHover, buttonHoverOff).click(startRecording); 
+      $('#pause').css({"opacity":"0.7", "background-color":"white"}).unbind();
+      $(this).css({"opacity":"0.7", "background-color":"#C0C0C0"}).unbind();
+      populatePlayer();
+      recorder.clear();
+    }
+    
+    function upload() {
+      $('#waiting-icon-3').spin(true);
+      $('#uploading-to-drive').toggle(true);
+      $('#record-pause-stop').toggle(false);
+      $('#recording-preview').html('').toggle(false);
+      var thisId = $(this).attr('id').split('upload-')[1];
+      fileIndex++;
+      postToCloudStorage(blobs[thisId], fileNameRoot + "_" + fileIndex, thisId);
+    }
+    
+   
+    
+function trash() {
+    $('#waiting-icon-3').spin(true);
+    $('#button-panel').toggle(false);
+    var recordingId = $(this).attr('class').split(" ")[0].split("trash-")[1];
+    var thisDriveKey = $('#drive-key-' + recordingId).val();
+    if (thisDriveKey !== '') {
+      google.script.run.removeFromDrive(recordingId, thisDriveKey);
+    } 
+    $('#recording-preview').html('').toggle(false);
+    removeNewRecordingById(recordingId)
+    displayExistingAudioWavFiles();
+ }
+  
+  
+function removeNewRecordingById(recordingId) {
+   for (var i=0; i< RUBRIC.newAudioRecordings.length; i++) {
+     if (RUBRIC.newAudioRecordings[i].recordingId === recordingId) {
+       RUBRIC.newAudioRecordings.splice(i, 1);
+     }
+   }
+   setSaveScores();
+}
+    
+function populatePlayer() {
+   recorder && recorder.exportWAV(function(blob) {
+   thisRecordingId = RUBRIC.docId + "_" + new Date().getTime();
+   blobs[thisRecordingId] = blob;
+   url = URL.createObjectURL(blob);
+   $('#recording-preview').html('<table id="recording-preview-table"><tr><td colspan="3"><audio controls="true" src="' + url + '"/></td><tr><tr><td class="trash2-' + thisRecordingId + ' hover-cell"><span title="Trash" class="trash-' + thisRecordingId + ' trash-audio-file" id="delete-' + thisRecordingId + '"></td><td class="centered">OR</td><td id="upload-' + thisRecordingId + '" class="hover-cell"><span class="upload-drive" title="Upload to Drive"></span><span id="drive-link-container-' + thisRecordingId + '"></span></td></tr></table>');
+   $('.trash2-' + thisRecordingId).click(trash);
+   $('.trash-' + thisRecordingId).click(trash);
+   $('#upload-' + thisRecordingId).click(upload);
+   $('#record-pause-stop').toggle(false);
+  });   
+}
+
+
+
+function populateDriveLink(fileObj) {
+   var thisNewFile = {
+     index: fileIndex,
+     fileName: fileObj.fileName,
+     url: fileObj.url,
+     key: fileObj.key,
+     recordingId: fileObj.recordingId
+   }
+   RUBRIC.newAudioRecordings.push(thisNewFile);
+   displayExistingAudioWavFiles();
+   setSaveScores();
+   scrollDownToFiles();
+ }
+ 
+ 
+function displayExistingAudioWavFiles() {
+  $('#old-recordings').html('');
+  $('#new-recordings').html('');
+  $('#waiting-icon-3').spin(false);
+  $('#uploading-to-drive').toggle(false);
+  $('#button-panel').toggle(true);
+  if (audioEnabled) {
+    $('#record-pause-stop').toggle(true);
+  } else {
+    $('#record-pause-stop').toggle(true).html('<div id="audio-disabled" title="Check your browser and microphone settings...">Audio disabled</div>');
+  }
+  var oldFileArray = RUBRIC.oldAudioRecordings;
+  var newFileArray = RUBRIC.newAudioRecordings;
+
+  oldFileArray.sort(function(a, b) {
+    return a.index - b.index;
+  });
+  newFileArray.sort(function(a, b) {
+    return a.index - b.index;
+  });
+  
+  if (oldFileArray.length>0) {
+    $('#old-recording-div').toggle(true);
+    $('#old-recording-header').unbind().click(function(){
+      $('#old-recordings').slideToggle('slow');
+      scrollDownToFiles();
+    });
+  }
+  for (var i=0; i<oldFileArray.length; i++) {
+    var recordingId = RUBRIC.docId + "_" + new Date().getTime() + '_old_' + i;   
+    $('#old-recordings').append('<tr id="main-' + recordingId + '" class="audio-file file-' + recordingId + '"><td class="play-' + recordingId + ' centered hover-cell"><a href="' + oldFileArray[i].url + '" target="_newpage" title="' + oldFileArray[i].fileName + '"><span class="play-' + recordingId + ' play-audio-file"></span></a></td><td class="padded-link"><span class="drive-link" id="drive-link-container-' + recordingId + '"></span></td></tr>');
+    $('#drive-link-container-' + recordingId).html('<a href="' + oldFileArray[i].url + '" target="_newpage" title="' + oldFileArray[i].fileName + '">' + truncate(oldFileArray[i].fileName, 30) + '</a>');
+  }
+  
+  if (newFileArray.length>0) {
+    $('#new-recording-div').toggle(true);
+  } else {
+    $('#new-recording-div').toggle(false);
+  }
+   for (var i=0; i<newFileArray.length; i++) {
+     var recordingId = newFileArray[i].recordingId;  
+     $('#new-recordings').append('<tr id="main-' + recordingId + '" class="audio-file file-' + recordingId + '"><td class="trash-' + recordingId + ' centered hover-cell"><span class="trash-' + recordingId + ' trash-audio-file2"></span></td><td class="padded-link"><span class="drive-link" id="drive-link-container-' + recordingId + '"></span></td><input class="sound-file-key" id="drive-key-' + recordingId + '" type="hidden"><input class="sound-file-name" id="file-name-' + recordingId + '" type="hidden"></tr>');
+     $('#drive-key-' + recordingId).val(newFileArray[i].key);
+     $('#file-name-' + recordingId).val(newFileArray[i].fileName);
+     $('.trash-' + recordingId).unbind().click(trash);
+     $('#drive-link-container-' + recordingId).html('<a href="' + newFileArray[i].url + '" target="_newpage" title="' + newFileArray[i].fileName + '">' + truncate(newFileArray[i].fileName, 25) + '</a>');
+     fileIndex++;
+   }
+}
+
+
+function scrollDownToFiles() {
+  $(".ui-layout-east").animate({scrollTop:1000},'50');
+}
+ 
+
+
+function postToCloudStorage(blob, fileName, recordingId) {
+  thisFileName = fileName;
+  var bucket = RUBRIC.bucket;
+  var postUrl = 'https://www.googleapis.com/upload/storage/v1/b/' + bucket + '/o?uploadType=resumable&name=' + recordingId;
+  var bytes = blob.size;
+  var xmlRequest = $.ajax({
+    url: postUrl,
+    type: "POST",
+    headers: {
+      'Content-Type' : 'application/json; charset=UTF-8',
+      'X-Upload-Content-Type' : 'audio/wav',
+      'X-Upload-Content-Length' : bytes
+    },
+    success: function(data, status, jqXHR) {
+      putToCloudStorage(jqXHR.getResponseHeader('Location'));
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      console.log(errorThrown);
+    }
+    });
+ }
+ 
+function putToCloudStorage(location) {
+  var xmlRequest = $.ajax({
+    url: location,
+    type: 'PUT',
+    headers: {
+      'Content-Type' : 'audio/wav'
+    },
+    processData: false,
+    data: blobs[thisRecordingId],
+    success: function(data, status, jqXHR) {
+      console.log(status);
+      google.script.run.withSuccessHandler(populateDriveLink).transferFileFromAppEngine(thisFileName, thisRecordingId, RUBRIC.docId, RUBRIC.feedbackEmails);
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      console.log(errorThrown);
+      $('#recording-preview').html('').toggle(false);
+      $('#button-panel').toggle(true);
+    }
+  });
+
+}
+ 
+ 
+   window.onload = function init() {
+    try {
+      // webkit shim
+      window.AudioContext = window.AudioContext || window.webkitAudioContext;
+      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+      window.URL = window.URL || window.webkitURL;   
+      audio_context = new AudioContext;
+    } catch (e) {
+      $('#record-pause-stop').toggle(false);
+    }
+      navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
+        $('#record-pause-stop').toggle(false);
+      });
+    };
+  
+  function success(url) {
+     console.log('success: '+url);
+  }
+  
+  function failure(err) {
+    console.log('failure');
+    console.log(err);
+  }
+  </script>
+
+  <script id="worker1" type="javascript/worker">
+    // This script won't be parsed by JS engines
+    // because its type is javascript/worker.
+    var recLength = 0,
+    recBuffersL = [],
+    recBuffersR = [],
+    sampleRate;
+    //rate = 16000;
+
+this.onmessage = function(e){
+  if (e.data) {
+    switch(e.data.command){
+      case 'init':
+        init(e.data.config);
+        break;
+      case 'record':
+        record(e.data.buffer);
+        break;
+      case 'exportWAV':
+        exportWAV(e.data.type);
+        break;
+      case 'getBuffer':
+        getBuffer();
+        break;
+      case 'clear':
+        clear();
+        break;
+    }
+  }
+};
+
+function init(config){
+  sampleRate = config.sampleRate;
+}
+
+function record(inputBuffer){
+  recBuffersL.push(inputBuffer[0]);
+ // recBuffersR.push(inputBuffer[1]);
+  recLength += inputBuffer[0].length;
+}
+
+
+function exportWAV(type){
+ var bufferL = mergeBuffers(recBuffersL, recLength);
+ //var bufferR = mergeBuffers(recBuffersR, recLength);
+ //var interleaved = interleave(bufferL, bufferR);
+ //var dataview = encodeWAV(interleaved);
+ var dataview = encodeWAV(bufferL);
+ var audioBlob = new Blob([dataview], { type: type });
+ 
+this.postMessage(audioBlob);
+}
+
+
+function getBuffer() {
+  var buffers = [];
+  buffers.push( mergeBuffers(recBuffersL, recLength) );
+  buffers.push( mergeBuffers(recBuffersR, recLength) );
+  this.postMessage(buffers);
+}
+
+function clear(){
+  recLength = 0;
+  recBuffersL = [];
+  recBuffersR = [];
+}
+
+function mergeBuffers(recBuffers, recLength){
+  var result = new Float32Array(recLength);
+  var offset = 0;
+  for (var i = 0; i < recBuffers.length; i++){
+    result.set(recBuffers[i], offset);
+    offset += recBuffers[i].length;
+  }
+  return result;
+}
+
+
+//original interleave function
+function interleave(inputL, inputR){
+  var length = inputL.length + inputR.length;
+  var result = new Float32Array(length);
+
+  var index = 0,
+    inputIndex = 0;
+
+  while (index < length){
+    result[index++] = inputL[inputIndex];
+    result[index++] = inputR[inputIndex];
+    inputIndex++;
+  }
+  return result;
+}
+
+
+function floatTo16BitPCM(output, offset, input){
+  for (var i = 0; i < input.length; i++, offset+=2){
+    var s = Math.max(-1, Math.min(1, input[i]));
+    output.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+  }
+}
+
+function writeString(view, offset, string){
+  for (var i = 0; i < string.length; i++){
+    view.setUint8(offset + i, string.charCodeAt(i));
+  }
+}
+
+function encodeWAV(samples){
+ var buffer = new ArrayBuffer(44 + samples.length * 2);
+ var view = new DataView(buffer);
+ 
+/* RIFF identifier */
+ writeString(view, 0, 'RIFF');
+ /* file length */
+ view.setUint32(4, 32 + samples.length * 2, true);
+ /* RIFF type */
+ writeString(view, 8, 'WAVE');
+ /* format chunk identifier */
+ writeString(view, 12, 'fmt ');
+ /* format chunk length */
+ view.setUint32(16, 16, true);
+ /* sample format (raw) */
+ view.setUint16(20, 1, true);
+ /* channel count */
+ //view.setUint16(22, 2, true); /*STEREO*/
+ view.setUint16(22, 1, true); /*MONO*/
+ /* sample rate */
+ view.setUint32(24, sampleRate, true);
+ /* byte rate (sample rate * block align) */
+ //view.setUint32(28, sampleRate * 4, true); /*STEREO*/
+ view.setUint32(28, sampleRate * 2, true); /*MONO*/
+ /* block align (channel count * bytes per sample) */
+ //view.setUint16(32, 4, true); /*STEREO*/
+ view.setUint16(32, 2, true); /*MONO*/
+ /* bits per sample */
+ view.setUint16(34, 16, true);
+ /* data chunk identifier */
+ writeString(view, 36, 'data');
+ /* data chunk length */
+ view.setUint32(40, samples.length * 2, true);
+ 
+floatTo16BitPCM(view, 44, samples);
+ 
+return view;
+}
+
+  </script>
+
+  <script>
+    function log(msg) {
+      // Use a fragment: browser will only render/reflow once.
+      var fragment = document.createDocumentFragment();
+      fragment.appendChild(document.createTextNode(msg));
+      fragment.appendChild(document.createElement('br'));
+
+      document.querySelector("#log").appendChild(fragment);
+    }
+
+    var blob = new Blob([document.querySelector('#worker1').textContent], {type: 'text/javascript'});
+  
+    var worker = new Worker(window.URL.createObjectURL(blob));
+    worker.onmessage = function(e) {
+      log("Received: " + e.data);
+    }
+    worker.postMessage(); // Start the worker.
+  </script>
+  
+  <script>
+  (function(window){
+ 
+  
+  var blob = new Blob([document.querySelector('#worker1').textContent], {type: 'text/javascript'});
+  
+  var WORKER_PATH = window.URL.createObjectURL(blob);
+
+  var Recorder = function(source, cfg){
+    var config = cfg || {};
+    var bufferLen = config.bufferLen || 4096;
+    this.context = source.context;
+    this.node = (this.context.createScriptProcessor ||
+                 this.context.createJavaScriptNode).call(this.context,
+                                                         bufferLen, 2, 2);
+    var worker = new Worker(config.workerPath || WORKER_PATH);
+    worker.postMessage({
+      command: 'init',
+      config: {
+        sampleRate: this.context.sampleRate
+      }
+    });
+    var recording = false,
+      currCallback;
+      
+
+    this.node.onaudioprocess = function(e){
+      if (!recording) return;
+      worker.postMessage({
+        command: 'record',
+        buffer: [
+          e.inputBuffer.getChannelData(0),
+         // e.inputBuffer.getChannelData(1)
+        ]
+      });
+    }
+
+    this.configure = function(cfg){
+      for (var prop in cfg){
+        if (cfg.hasOwnProperty(prop)){
+          config[prop] = cfg[prop];
+        }
+      }
+    }
+
+    this.record = function(){
+      recording = true;
+    }
+
+    this.stop = function(){
+      recording = false;
+    }
+
+    this.clear = function(){
+      worker.postMessage({ command: 'clear' });
+    }
+
+    this.getBuffer = function(cb) {
+      currCallback = cb || config.callback;
+      worker.postMessage({ command: 'getBuffer' })
+    }
+
+    this.exportWAV = function(cb, type){
+      currCallback = cb || config.callback;
+      type = type || config.type || 'audio/wav';
+      if (!currCallback) throw new Error('Callback not set');
+      worker.postMessage({
+        command: 'exportWAV',
+        type: type
+      });
+    }
+
+   worker.onmessage = function(e){
+      var blob = e.data;
+      currCallback(blob);
+    }
+
+
+    source.connect(this.node);
+    this.node.connect(this.context.destination);    //this should not be necessary
+  };
+  
+
+  Recorder.forceDownload = function(blob, filename){
+    var url = (window.URL || window.webkitURL).createObjectURL(blob);
+    var link = window.document.createElement('a');
+    link.href = url;
+    link.download = filename || 'output.wav';
+    var click = document.createEvent("Event");
+    click.initEvent("click", true, true);
+    link.dispatchEvent(click);
+  }
+
+  window.Recorder = Recorder;
+
+})(window);
+
+
+////////RUBRIC STUFF//////
+//////////////////////////
+
+   //globals for rubric
+    var COLS = 2;
+    var RUBRIC = {};
+    var audioEnabled = false;
+
+    $(function() {
+      $('body').layout({ 
+          applyDefaultStyles: false,
+          minSize: 160,
+          onresize_end: function() {}
+        }).sizePane("north", 200); 
+      $('.ui-layout-north').layout({
+          applyDefaultStyles: false,
+          onresize_end: function(){ rebuildFullRubric(); adjustTabs();},
+          east : {minSize: 250}
+      }).sizePane("east", 280); 
+      $('#waiting-icon-1').spin('large');
+      $('#waiting-icon-3').spin('large');
+      // Setup doc chooser jump button
+      google.script.run.withSuccessHandler(populateRubric).withFailureHandler(rubricFailure).getRubricObject(docId);
+      google.script.run.withSuccessHandler(populateDocChooser).withFailureHandler(docChooserFailure).getDocList(docId);
+      if (navigator.appVersion.indexOf("Win")!=-1) {
+        $(".fht-thead").css('scroll-y', 'auto');
+      }
+    });
+   
+   
+   function rubricFailure(err) {
+     console.log(err.message);
+   }
+
+
+    function rebuildFullRubric() {
+      $("#full-rubric-table").fixedHeaderTable('destroy');
+      var height = $('.ui-layout-north').height();
+      $("#full-rubric-table").fixedHeaderTable({
+       height: height
+      });
+      $(".button-panel-outer").css('width','100%');
+      $(".comment-textarea").css('width','100%');
+    }
+    
+    function toggleSavedStateMessage(rubric) {
+        if (rubric) {
+          RUBRIC = JSON.parse(JSON.stringify(rubric));
+        }
+        if (RUBRIC.timeStamp === "temp") {
+          $('.ui-layout-pane, .ui-widget-header, #rubric-container, #tabs').css({"backgroundColor":"#FFFFE0", "border": "1px #FFFFE0"});
+          $('#last-saved-info').stop(true).toggle(true);
+          $('#last-saved-info').fadeToggle( 5000, "linear" );
+          $('#last-saved-info').html("Scores not yet submitted");
+          $('#last-saved-info').css('background-color', 'lightyellow');
+          $('#saving-info-hover-target').unbind().hover(function() { $('#last-saved-info').fadeToggle( 100, "linear" ); }, function() { $('#last-saved-info').fadeToggle( 1000, "linear" ); });
+        } else if ((RUBRIC.timeStamp)&&(RUBRIC.userEmail)) {
+          $('.ui-layout-pane, .ui-widget-header, #rubric-container, #tabs').css({"backgroundColor":"whitesmoke", "border": "whitesmoke"});
+          $('#last-saved-info').stop(true).toggle(true);
+          $('#last-saved-info').fadeToggle( 5000, "linear" );
+          $('#last-saved-info').html("Scores last submitted by " + rubric.userEmail + " on " + (new Date(rubric.timeStamp)).toLocaleString());
+          $('#last-saved-info').css('background-color', 'whitesmoke');
+          $('#saving-info-hover-target').unbind().hover(function() { $('#last-saved-info').fadeToggle( 100, "linear" ); }, function() { $('#last-saved-info').fadeToggle( 1000, "linear" ); });
+        } else {
+          $('.ui-layout-pane, .ui-widget-header, #rubric-container, #tabs').css({"backgroundColor":"white", "border": "white"});
+        }
+    }
+    
+    function toggleFullRubricOpenButton() {
+       $('#rubric-open-button-container').stop().toggle(true);
+       $('#rubric-open-button').stop().toggle(true);
+       $('#rubric-open-button').fadeToggle( 5000, "linear");
+       $('#rubric-open-button-container').unbind('mouseenter mouseleave').hover(function() { $('#rubric-open-button').stop().fadeToggle( 1, "linear");}, function() { $('#rubric-open-button').stop().fadeToggle( 5000, "linear"); });
+    }
+    
+    function toggleFullRubricCloseButton() {
+       $('#rubric-close-button-container').stop().toggle(true);
+       $('#rubric-close-button').stop().toggle(true);
+       $('#rubric-close-button').fadeToggle( 5000, "linear");
+       $('#rubric-close-button-container').unbind('mouseenter mouseleave').hover(function() { $('#rubric-close-button').stop().fadeToggle( 1, "linear"); }, function() { $('#rubric-close-button').toggle(true).fadeToggle( 5000, "linear"); });
+    }
+
+
+    
+    function showError(type, resourceUrl, userEmail) {
+      if (type === "no associations") {
+        var html = '<table id="no-associations"><tr><td><img src="https://storage.googleapis.com/goobric-icons/goobric-med.gif"/></td><td>Uh oh <strong>' + userEmail + '</strong>! No Doctopus rubric associations were found for this Drive file. To use Goobric with a Google Drive file, ';
+        html += 'it must first have been distributed (or ingested from Google Classroom) by the <a href="https://chrome.google.com/webstore/detail/doctopus/ffhegaddkjpkfiemhhnphmnadfbkdhbf?utm_source=permalink" target="_blank">Doctopus Add-on for Sheets</a> ';
+        html += 'and had a rubric associated with it.  If this seems wrong, try re-attaching your rubric in the Doctopus assignment management panel.  Also check to make sure you are logged in via the Google account that has full access to all student assignments, rubric, and Doctopus spreadsheet ';
+        html += 'for the assignment. Try <a href="https://accounts.google.com/Logout?&continue=https://script.google.com/macros/s/AKfycby4mwRwQEwtecDQbD5vrA2opzkC8W0v9MfQbrWBPLUPvjTWero/exec?docId=' + docId + '%26webApp=true" target="_blank">logging out of all accounts</a> and logging back into the Google account you used to create this assignment. ';
+        html += 'For tutorials on how to use Doctopus, visit the <a href="http://cloudlab.newvisions.org/add-ons/doctopus" target="_blank">Doctopus home page.</a></td></tr></table>';   
+        $('body').html(html);
+      }
+      if (type === "no drive apps allowed") {
+        $('body').html('<table id="no-associations"><tr><td><img src="https://storage.googleapis.com/goobric-icons/goobric-med.gif"/></td><td>Uh oh <strong>' + userEmail + '</strong>! It looks like your Google Apps domain administrator doesn\'t allow Drive Apps to be installed on your domain.  Talk to them about allowing users to install Drive Apps.');
+      }
+      if (type === "no rubric access") {
+        $('body').html('<table id="no-associations"><tr><td><img src="https://storage.googleapis.com/goobric-icons/goobric-med.gif"/></td><td>Uh oh <strong>' + userEmail + '</strong>! A rubric association was found for this Drive file, but you do not have access to the rubric spreadsheet itself... Please make sure this account has access to the rubric Sheet for this assignment. You can request access to the rubric spreadsheet <a href="' + resourceUrl + '" target="_blank">here.</a></td></tr><table>');
+      }
+      if (type === "no document access") {
+        var html = '<table id="no-associations"><tr><td><img src="https://storage.googleapis.com/goobric-icons/goobric-med.gif"/></td><td>Uh oh <strong>' + userEmail + '</strong>! It appears you don\'t have access to this student file.  This can happen if you\'re using multi-account login, or if a student deletes or unshares you on a file you don\'t own. Try <a href="https://accounts.google.com/Logout?&continue=https://script.google.com/macros/s/AKfycby4mwRwQEwtecDQbD5vrA2opzkC8W0v9MfQbrWBPLUPvjTWero/exec?docId=' + docId + '%26webApp=true" target="_blank">logging out of all accounts</a> and logging back into the Google account you used to create this assignment.';
+      if (resourceUrl) {
+        html += '<a href="' + resourceUrl + '" target="_blank">Click here</a> to proceed to the next document on your roster...';
+      }
+        html += '</td></tr><table>';
+        $('body').html(html);
+      }
+      if (type === "no doctopus access") {
+        var html = '<table id="no-associations"><tr><td><img src="https://storage.googleapis.com/goobric-icons/goobric-med.gif"/></td><td>Uh oh <strong>' + userEmail + '</strong>! It appears you don\'t have access to the Doctopus spreadsheet linked to this assignment, or it no longer exists.';
+        html += ' Your can <a href="' + resourceUrl + '" target="_blank">click here</a> to attempt to request access to it...';
+        html += '</td></tr><table>';
+        $('body').html(html);
+      }
+    }
+
+
+    function populateRubric(rubric) {
+      if (rubric.homepage) {
+        var newDoc = document.open("text/html", "replace");
+        newDoc.write(rubric.content);
+        newDoc.close();
+      }
+    
+      if (rubric.error === "No rubric association found") {
+        showError("no associations", '', rubric.userEmail);
+        return;
+      }
+      if (rubric.error === "No rubric access") {
+        showError("no rubric access", rubric.rubricUrl, rubric.userEmail);
+        return;
+      }
+      if (rubric.error === "Student file not accessible") {
+        showError("no document access", rubric.nextDocUrl, rubric.userEmail);
+        return;
+      }
+      if (rubric.error === "Drive Apps not allowed") {
+        showError("no drive apps allowed", rubric.nextDocUrl, rubric.userEmail);
+        return;
+      }
+      if (rubric.error === "No access to Doctopus spreadsheet") {
+        showError("no doctopus access", rubric.doctopusUrl, rubric.userEmail);
+        return;
+      }
+      RUBRIC = JSON.parse(JSON.stringify(rubric));
+      docId = RUBRIC.docId;
+      fileNameRoot = rubric.thisDocTitle;
+      $('#doctopus-link').attr('href', RUBRIC.doctopusUrl);
+      $('#old-recordings').html('');
+      $('#new-recordings').html('');
+      displayExistingAudioWavFiles();
+      
+      var authorEmails = rubric.feedbackEmails.split(",");
+      var authorUserNames = [];
+      
+      if (RUBRIC.emailOption === "true") {
+          $( ".email-authors" ).attr("checked", true);
+      } else {
+          $( ".email-authors" ).attr("checked", false);
+      }
+      
+      if (RUBRIC.autoAdvance === "true") {
+        $("#auto-advance").attr("checked", true);
+      } else {
+        $("#auto-advance").attr("checked", false);
+      }
+      
+      for (var i=0; i<authorEmails.length; i++) {
+        if (authorEmails[i].split('@')[0]) {
+         authorUserNames.push(authorEmails[i].split('@')[0]);
+        }
+      }
+      
+      if (RUBRIC.docAccess !== "VIEW") {
+        if (RUBRIC.studentDocAccess === "VIEW") {
+          $('#viewer-to-commenter-container').toggle(true);
+          if (RUBRIC.viewerToCommenter === "true") {
+            $('#viewer-to-commenter').attr("checked", true);
+          } else {
+            $('#viewer-to-commenter').attr("checked", false);
+          }
+        }
+      }
+      
+      authorUserNames = authorUserNames.join(", ");
+      $('#author-emails').html(truncate(authorUserNames, 20)).prop('title', authorEmails);
+      var scoreArray = rubric.scale.split("||");
+      COLS = scoreArray.length;
+      $("#full-rubric").html(createModalRubricTable());
+      var height = $('.ui-layout-north').height();
+      $("#full-rubric-table").fixedHeaderTable({
+        height: height
+      });
+      for (var j=0; j<(rubric.rows-1); j++) {
+          var key = 'skill-'+(j+1);
+          $('#tab-list').append('<li><a href="#tabs-' + key + '" title="' + rubric[key].skillName + '"><input class="' + key + ' score-input" type="text"/> ' + rubric[key].skillName + '</a></li>');
+          $('.' + key).unbind().keyup(setScoreKeyup);
+          $('.' + key).focus(makeTabActive).click(adjustTabs);
+          var thisTable = createSkillTable(rubric[key]);
+          $('#tabs').append('<div id="tabs-' + key + '">' + thisTable + '</div>');
+            var score = rubric[key].score;
+            $('.' + key).val(score);
+            if (rubric.type === 'nonNumeric') {
+              $('.' + key).toggle(false);
+            }
+            for (var i=0; i<scoreArray.length; i++) {
+              if (score !== '') {
+                if (score == scoreArray[i]) {
+                  $('.score-' + rubric[key].index + '-' + i).css('backgroundColor','lightgrey');
+                  $('.descriptor-' + rubric[key].index + '-' + i).css('backgroundColor','lightgrey');
+                } else if (((scoreArray[i+1])&&(score > scoreArray[i])&&(score < scoreArray[i+1]))&&(rubric.type === 'numeric')) {
+                  $('.score-' + rubric[key].index + '-' + i).css('backgroundColor','lightgrey');
+                  $('.descriptor-' + rubric[key].index + '-' + i).css('backgroundColor','lightgrey');
+                  $('.score-' + rubric[key].index + '-' + (i+1)).css('backgroundColor','lightgrey');
+                  $('.descriptor-' + rubric[key].index + '-' + (i+1)).css('backgroundColor','lightgrey');
+                } else if (((scoreArray[i+1])&&(score < scoreArray[i])&&(score > scoreArray[i+1]))&&(rubric.type === 'numeric')) {
+                  $('.score-' + rubric[key].index + '-' + i).css('backgroundColor','lightgrey');
+                  $('.descriptor-' + rubric[key].index + '-' + i).css('backgroundColor','lightgrey');
+                  $('.score-' + rubric[key].index + '-' + (i+1)).css('backgroundColor','lightgrey');
+                  $('.descriptor-' + rubric[key].index + '-' + (i+1)).css('backgroundColor','lightgrey');
+                }
+              }
+              $('.descriptor-' + rubric[key].index + '-' + i).hover(function() { $(this).addClass('hover'); var idArray = $(this).attr('class').split(' ')[0].split('-'); $('.score-' + idArray[1] + '-' + idArray[2]).css('fontWeight','bold');}, function() {   $(this).removeClass('hover');  var idArray = $(this).attr('class').split(' ')[0].split('-');  $('.score-' + idArray[1] + '-' + idArray[2]).css('fontWeight','normal'); });
+              $('.descriptor-' + rubric[key].index + '-' + i).hover(function() { var idArray = $(this).attr('class').split(' ')[0].split('-');  $('.header-' + idArray[2]).css('fontWeight','bold');}, function() {  var idArray = $(this).attr('class').split(' ')[0].split('-');  $('.header-' + idArray[2]).css('fontWeight','normal'); });
+              $('.descriptor-' + rubric[key].index + '-' + i).hover(function() {  var idArray = $(this).attr('class').split(' ')[0].split('-'); $('.skillName-skill-' + idArray[1]).css('backgroundColor','whitesmoke');}, function() {  var idArray = $(this).attr('class').split(' ')[0].split('-');  $('.skillName-skill-' + idArray[1]).css('backgroundColor','white'); });
+              $('.descriptor-' + rubric[key].index + '-' + i).hover(function() {$(this).addClass("hover")}, function() {$(this).removeClass("hover")});
+              $('.descriptor-' + rubric[key].index + '-' + i).click(setScoreClick);
+        }
+      }
+      if (rubric.comment) {
+        $('.comment-textarea').val(rubric.comment).keyup(function() {
+           delay(function(){
+             setSaveScores();
+           }, 1000 );
+      });
+      } else {
+        $('.comment-textarea').val('').keyup(function() {
+           delay(function(){
+             setSaveScores();
+           }, 1000 );
+      });
+      }
+      $( "#tabs" ).tabs({
+        activate: function() { adjustTabs(); }
+      }); 
+      adjustTabs();
+      $("#full-rubric").toggle();
+      
+      $("#left-top-panel").append('<div class="rubric-button-container" id="rubric-close-button-container" hidden><button id="rubric-close-button" title="Minimize to tab view"></button></div>');
+      var fullRubricCloseButton = $('#rubric-close-button');
+      fullRubricCloseButton.button( {
+        text: false,
+        icons: {
+            primary: "close-dialog"   // Custom icon
+        }});
+  
+      $( "#rubric-close-button-container" ).click(function() {
+          $(this).stop().toggle(false);
+          $('#rubric-close-button').toggle(false);
+          toggleFullRubricOpenButton();
+          $("#tabs").toggle();
+          $("#full-rubric").toggle();
+      }); 
+      
+      $("#left-top-panel").append('<div class="rubric-button-container" id="rubric-open-button-container"><button id="rubric-open-button" title="Expand to full rubric view"></button></div>');
+      var fullRubricOpenButton = $('#rubric-open-button');
+      fullRubricOpenButton.button( {
+        text: false,
+        icons: {
+            primary: "open-dialog"   // Custom icon
+        }});
+      
+      $( "#rubric-open-button-container" ).click(function() {
+          $(this).stop().toggle(false);
+          $('#rubric-open-button').toggle(false);
+          toggleFullRubricCloseButton();
+          $("#tabs").toggle();
+          $("#full-rubric").toggle();
+          rebuildFullRubric();
+      }); 
+      
+      toggleFullRubricOpenButton();
+      $( ".prev" ).unbind().click(function() { setNewDoc("prev");});
+      $( ".next" ).unbind().click(function() { setNewDoc("next");});
+      $( ".submit" ).unbind().click(submitRubric);
+      $( ".email-authors-container" ).attr('title', rubric.feedbackEmails.split(",").join(", "));
+      $("#docs-editor").attr('src', rubric.thisDocUrl);
+      $('#waiting-icon-1').spin(false);
+      $('#waiting-icon-3').spin(false);
+      $('#button-panel').toggle(true);
+      if (audioEnabled) {
+        $('#record-pause-stop').toggle(true);
+      }
+      toggleSavedStateMessage(rubric);
+    }
+    
+
+  // JumpList stuff
+  function populateDocChooser (docList) {
+		console.log('populateDocChoose');
+    var jumpWidget = $('.jump')[0]
+    toSelect = 0;
+    for (var i=0; i<docList.length; i++) {
+      var name=docList[i][0];
+			var url=docList[i][1]; 
+			var selected = '';
+			if (url.indexOf(docId)>=0) {
+				toSelect=i
+				var selected = ' selected="selected"'
+			}
+      jumpWidget.appendChild($.parseHTML('<option value="'+url+'"'+selected+'>'+name+'</option>')[0])     	  
+    }
+    console.log('selecting option #'+toSelect);
+    jumpWidget.onchange = function() { setNewDoc("jump");};
+  }
+  
+  function docChooserFailure (err) {
+    console.log('docChooserFailure',err.message)
+  }
+	
+
+										 
+function adjustTabs() { 
+  var numTabs = 0;
+  var maxWidth = $( "#tab-list" ).width();
+  var hasWidth = 0; 
+  var active = $( "#tabs" ).tabs( "option", "active" );
+  var activeWidth = 0; 
+  $( "#tab-list" ).children().each(function() {
+   $(this).width('auto');
+   $(this).toggleClass('deselected-tabs-anchor', false);
+     hasWidth += $(this).outerWidth();
+     numTabs++; 
+   })
+  var diff = (hasWidth - maxWidth);
+  if (diff > 0) {
+  $( "#tab-list" ).children().each(function(index) { 
+    if (index === active) {
+      activeWidth = $(this).outerWidth();
+    }
+  });
+  var remainder = (maxWidth - activeWidth) - 40;
+  var newWidth = (remainder/(numTabs-1) > 60) ? (remainder/(numTabs-1)) : 100;
+  newWidth = Math.round(newWidth);
+  $( "#tab-list" ).children().each(function(index) {
+    if (index!==active) {
+      $(this).css({'width': newWidth, 'display': 'inline-block', 'white-space':'nowrap', 'overflow' : 'hidden', 'text-overflow' : 'ellipsis'});
+      $(this).toggleClass('deselected-tabs-anchor', true);
+    } 
+ });
+}
+}
+
+
+function makeTabActive() {
+  var tabIndex = $(this).attr('class').split(' ')[0].split('-')[1];
+  if (!isNaN(tabIndex)) {
+    tabIndex = tabIndex-1;
+    $( "#tabs" ).tabs({
+      active: tabIndex
+    });
+  }
+}
+    
+function setSaveScores() {
+  var scoreObj = {};
+  scoreObj.docId = RUBRIC.docId;
+  scoreObj.scores = {};
+  for (var key in RUBRIC) {
+    if (key.indexOf("skill")!== -1) {
+      scoreObj.scores[key] = RUBRIC[key].score;
+    }
+  }
+  for (var i=0; i<RUBRIC.newAudioRecordings.length; i++) {
+    scoreObj.scores['audioWavFile' + (i+1)] = RUBRIC.newAudioRecordings[i].key;
+  }
+  RUBRIC['comment'] = $('.comment-textarea').val();
+  scoreObj.scores['comment'] = RUBRIC['comment'];
+  $('.ui-layout-pane, .ui-widget-header, #rubric-container, #tabs').css({"backgroundColor":"#FFFFE0", "border": "#FFFFE0"});
+  google.script.run.withSuccessHandler(logSuccess).tempSaveScores(scoreObj);
+}
+
+
+function logSuccess(obj) {
+  if( !$('#saving-info').is(':animated') ) {
+    $('#saving-info').html("Scores temporarily saved...").toggle(true).fadeToggle( 2000, "linear");
+  }
+}
+
+var delay = (function(){
+  var timer = 0;
+  return function(callback, ms){
+    clearTimeout (timer);
+    timer = setTimeout(callback, ms);
+  };
+})();
+
+
+function submitRubric() {
+  $('.ui-layout-pane, .ui-widget-header, #rubric-container, #tabs').css('opacity','0.7');
+  $('#waiting-icon-1').spin('large');
+  $('#waiting-icon-2').spin('large');
+  $('#waiting-icon-3').spin('large');
+  $('#record-pause-stop').toggle(false);
+  $( ".prev" ).attr('disabled', true);
+  $( ".submit" ).attr('disabled', true);
+  $( ".next" ).attr('disabled', true);
+  $('.comment-textarea').unbind();
+  for (var key in RUBRIC) {
+    if (key.indexOf("skill")!== -1) {
+      RUBRIC[key].score = $('.' + key).val();
+      $('.' + key).unbind();
+    }
+  }
+  RUBRIC['oldAudioRecordings'] = [];
+  RUBRIC['comment'] = $('.comment-textarea').val();
+  if ($('.email-authors').is(':checked')) {
+    RUBRIC['emailOption'] = 'true';
+  } else {
+    RUBRIC['emailOption'] = 'false';
+  }
+  if ($('#auto-advance').is(':checked')) {
+    RUBRIC['autoAdvance'] = 'true';
+  } else {
+    RUBRIC['autoAdvance'] = 'false';
+  }
+  if ($('#viewer-to-commenter').is(':checked')) {
+    RUBRIC['viewerToCommenter'] = 'true';
+  } else {
+    RUBRIC['viewerToCommenter'] = 'false';
+  }
+  RUBRIC.userEmail = RUBRIC.thisUserEmail;
+  RUBRIC.timeStamp = new Date().toLocaleString();
+  if (RUBRIC['autoAdvance']==="true") {
+    google.script.run.submitRubricScores(RUBRIC);
+    $('#docs-editor').attr('src', RUBRIC.nextDocUrl);
+    setNewDoc('next');
+  } else {
+    google.script.run.withSuccessHandler(submitComplete).withFailureHandler(logError).submitRubricScores(RUBRIC);
+  }
+}
+
+function logError(err) {
+  google.script.run.logError(err);
+}
+
+function submitComplete(autoAdvance) {
+    $('.ui-layout-pane, .ui-widget-header, #rubric-container, #tabs').css({"backgroundColor":"whitesmoke", "border": "whitesmoke", "opacity" : "1"});
+    $('#waiting-icon-1').spin(false);
+    $('#waiting-icon-2').spin(false);
+    $('#waiting-icon-3').spin(false);
+    if (audioEnabled) {
+      $('#record-pause-stop').toggle(true);
+    }
+    $( ".submit" ).attr('disabled', false);
+    $( ".prev" ).attr('disabled', false);
+    $( ".next" ).attr('disabled', false);
+    $('#saving-info').html("Scores submitted!").toggle(true).fadeToggle( 5000, "linear");  
+    RUBRIC.oldAudioRecordings = RUBRIC.newAudioRecordings.slice();
+    RUBRIC.newAudioRecordings = [];
+    displayExistingAudioWavFiles();
+    toggleSavedStateMessage(RUBRIC);
+}
+
+    
+	function refreshJumpWidget (docId) {
+		var jumpWidget = $('.jump')
+		$('.jump option').each(function (idx) {
+			var url = this.value
+			if (url.indexOf(docId)>=0) {
+				jumpWidget.onchange = function () {}; // Don't do anything when we change...
+				jumpWidget.val(url);
+				jumpWidget.onchange = function () { setNewDoc("jump");} // Put back callback
+			}
+		}) // end foreach .jump option
+	}// end refreshJumpWidget
+
+function refreshRubric(rubric) {
+      if (rubric.error === "No rubric association found") {
+        showError("no associations", '', rubric.userEmail);
+        return;
+      }
+      if (rubric.error === "No rubric access") {
+        showError("no rubric access", rubric.rubricUrl, rubric.userEmail);
+        return;
+      }
+      if (rubric.error === "Student file not accessible") {
+        showError("no document access", rubric.nextDocUrl, rubric.userEmail);
+        return;
+      }
+      if (rubric.error === "No access to Doctopus spreadsheet") {
+        showError("no doctopus access", rubric.doctopusUrl, rubric.userEmail);
+        return;
+      }
+      
+      $('.ui-layout-pane, .ui-widget-header, #rubric-container, #tabs').css({"backgroundColor":"whitesmoke", "border": "whitesmoke", "opacity" : "1"});
+      fileIndex = 0;
+      RUBRIC = JSON.parse(JSON.stringify(rubric));
+      docId = RUBRIC.docId;
+
+      refreshJumpWidget(docId)      
+
+      if (RUBRIC.docAccess !== "VIEW") {
+        if (RUBRIC.studentDocAccess === "VIEW") {
+          $('#viewer-to-commenter-container').toggle(true);
+          if (RUBRIC.viewerToCommenter === "true") {
+            $('#viewer-to-commenter').attr("checked", true);
+          } else {
+            $('#viewer-to-commenter').attr("checked", false);
+          }
+        }
+      }
+      
+      fileNameRoot = rubric.thisDocTitle;
+      $('#doctopus-link').attr('href', RUBRIC.doctopusUrl);
+      $('#old-recordings').html('');
+      $('#new-recordings').html('');
+      $('#old-recording-div').toggle(false);
+      displayExistingAudioWavFiles();
+      var authorEmails = rubric.feedbackEmails.split(",");
+      var authorUserNames = [];
+      for (var i=0; i<authorEmails.length; i++) {
+        if (authorEmails[i].split('@')[0]) {
+         authorUserNames.push(authorEmails[i].split('@')[0]);
+        }
+      }
+      authorUserNames = authorUserNames.join(", ");
+      $('#author-emails').html(truncate(authorUserNames, 30)).prop('title', authorEmails);
+      var scoreArray = rubric.scale.split("||");
+      COLS = scoreArray.length;
+      $('#full-rubric-dialog').html(createModalRubricTable());
+      $('.skill-strand').css('background-color', 'white');
+      toggleSavedStateMessage(rubric);
+      for (var j=0; j<(rubric.rows-1); j++) {
+        var key = 'skill-' + (j+1);
+        var score = rubric[key].score;      
+            $('.' + key).unbind().keyup(setScoreKeyup);
+            $('.' + key).focus(makeTabActive).click(adjustTabs);
+            $('.' + key).val(score);
+            if (rubric.type === 'nonNumeric') {
+              $('.' + key).toggle(false);
+            } else {
+              $('.' + key).toggle(true);
+            }
+            for (var i=0; i<scoreArray.length; i++) {
+              if (score !== '') {
+                if (score == scoreArray[i]) {
+                  $('.score-' + rubric[key].index + '-' + i).css('backgroundColor','lightgrey');
+                  $('.descriptor-' + rubric[key].index + '-' + i).css('backgroundColor','lightgrey');
+                } else if (((scoreArray[i+1])&&(score > scoreArray[i])&&(score < scoreArray[i+1]))&&(rubric.type === 'numeric')) {
+                  $('.score-' + rubric[key].index + '-' + i).css('backgroundColor','lightgrey');
+                  $('.descriptor-' + rubric[key].index + '-' + i).css('backgroundColor','lightgrey');
+                  $('.score-' + rubric[key].index + '-' + (i+1)).css('backgroundColor','lightgrey');
+                  $('.descriptor-' + rubric[key].index + '-' + (i+1)).css('backgroundColor','lightgrey');
+                  break;
+                } else if (((scoreArray[i+1])&&(score < scoreArray[i])&&(score > scoreArray[i+1]))&&(rubric.type === 'numeric')) {
+                  $('.score-' + rubric[key].index + '-' + i).css('backgroundColor','lightgrey');
+                  $('.descriptor-' + rubric[key].index + '-' + i).css('backgroundColor','lightgrey');
+                  $('.score-' + rubric[key].index + '-' + (i+1)).css('backgroundColor','lightgrey');
+                  $('.descriptor-' + rubric[key].index + '-' + (i+1)).css('backgroundColor','lightgrey');
+                  break;
+                }  else {
+                  $('.score-' + rubric[key].index + '-' + i).css('backgroundColor','white');
+                  $('.descriptor-' + rubric[key].index + '-' + i).css('backgroundColor','white');
+                }
+              } else {
+                $('.score-' + rubric[key].index + '-' + i).css('backgroundColor','white');
+                $('.descriptor-' + rubric[key].index + '-' + i).css('backgroundColor','white');
+              }
+            }
+            for (var i=0; i<scoreArray.length; i++) {
+              $('.descriptor-' + rubric[key].index + '-' + i).unbind().hover(function() { $(this).addClass('hover'); var idArray = $(this).attr('class').split(' ')[0].split('-');  $('.score-' + idArray[1] + '-' + idArray[2]).css('fontWeight','bold');}, function() {  $(this).removeClass('hover'); var idArray = $(this).attr('class').split(' ')[0].split('-');  $('.score-' + idArray[1] + '-' + idArray[2]).css('fontWeight','normal'); });
+              $('.descriptor-' + rubric[key].index + '-' + i).hover(function() { var idArray = $(this).attr('class').split(' ')[0].split('-');  $('.header-' + idArray[2]).css('fontWeight','bold');}, function() {  var idArray = $(this).attr('class').split(' ')[0].split('-');  $('.header-' + idArray[2]).css('fontWeight','normal'); });
+              $('.descriptor-' + rubric[key].index + '-' + i).hover(function() {  var idArray = $(this).attr('class').split(' ')[0].split('-'); $('.skillName-skill-' + idArray[1]).css('backgroundColor','whitesmoke');}, function() {  var idArray = $(this).attr('class').split(' ')[0].split('-');  $('.skillName-skill-' + idArray[1]).css('backgroundColor','white'); });
+              $('.descriptor-' + rubric[key].index + '-' + i).click(setScoreClick);
+            }
+    }
+    if (rubric.comment) {
+        $('.comment-textarea').val(rubric.comment).unbind().keyup(function() {
+           delay(function(){
+             setSaveScores();
+           }, 1000 );
+    });
+    } else {
+        $('.comment-textarea').val('').unbind().keyup(function() {
+           delay(function(){
+             setSaveScores();
+           }, 1000 );
+    });
+    }
+    $( ".prev" ).unbind().click(function() { setNewDoc("prev");});
+    $( ".next" ).unbind().click(function() { setNewDoc("next");});
+    $( ".email-authors-container" ).attr('title', rubric.feedbackEmails.split(",").join(", "));
+    $('#full-rubric-table').toggleClass('invisible', false);
+    
+    $('iframe.ui-layout-center').toggle();
+    $('#waiting-icon-1').spin(false);
+    $('#waiting-icon-2').spin(false);   
+    $('#waiting-icon-3').spin(false);
+    $('#rubric-container').toggle(true);
+    $('#button-panel').toggle(true);
+    if (audioEnabled) {
+      $('#record-pause-stop').toggle(true);
+    }
+    $( "#tabs" ).tabs( "option", "active", 0 );
+    if ($('#docs-editor').attr('src') !== rubric.thisDocUrl) {
+      $('#docs-editor').attr('src', rubric.thisDocUrl);    
+    }
+}
+
+function setNewDoc(action) {
+  $('.ui-layout-pane, .ui-widget-header, #rubric-container, #tabs').css({"backgroundColor":"white", "border": "white"});
+  $( ".submit" ).attr('disabled', false);
+  $( ".prev" ).attr('disabled', false);
+  $( ".next" ).attr('disabled', false);
+  $('#waiting-icon-1').spin('large');
+  $('#waiting-icon-2').spin('large');
+  $('#waiting-icon-3').spin('large');
+  $('#record-pause-stop').toggle(false);
+  $('#button-panel').toggle(false);
+  $('#rubric-container').toggle(false);
+  $('iframe.ui-layout-center').toggle(false);
+  $('#full-rubric-table').toggleClass('invisible', true);
+  switch (action) {
+  case "next":
+    var url = RUBRIC.nextDocUrl;
+    break;
+  case "prev":
+    var url = RUBRIC.prevDocUrl;
+    break;
+  case "jump":
+    var url = $('.jump')[0].value;
+    break;
+  }
+  $('#docs-editor').attr('src', url);
+  var driveKey = returnDriveKey(url); 
+  google.script.run.withSuccessHandler(refreshRubric).getRubricObject(driveKey);
+}
+    
+function setScoreKeyup() {
+  var idArray = $(this).attr('class').split(' ')[0].split('-');
+  var score = $(this).val();
+  RUBRIC['skill-' + idArray[1]].score = score;
+  $('.skill-' + idArray[1]).val(score);
+  var scoreArray = RUBRIC.scale.split("||");
+  if (+score > getMaxOfArray(scoreArray)&&(RUBRIC.type === 'numeric')) {
+    for (var i=0; i<scoreArray.length; i++) {
+      $('.score-' + idArray[1] + '-' + i).css('backgroundColor','white');
+      $('.descriptor-' + idArray[1] + '-' + i).css('backgroundColor','white').hover(function() {$(this).addClass("hover")}, function() {$(this).removeClass("hover")});
+    }
+  }
+  for (var i=0; i<scoreArray.length; i++) {
+    if (score == scoreArray[i]) {
+       $('.score-' + idArray[1] + '-' + i).css('backgroundColor','lightgrey');
+       $('.descriptor-' + idArray[1] + '-' + i).css('backgroundColor','lightgrey');
+    } else if ((RUBRIC.type === 'numeric')&&(scoreArray[i+1])&&(+score > scoreArray[i])&&(+score < scoreArray[i+1])) {
+       $('.score-' + idArray[1] + '-' + i).css('backgroundColor','lightgrey');
+       $('.descriptor-' + idArray[1] + '-' + i).css('backgroundColor','lightgrey');
+       $('.score-' + idArray[1] + '-' + (i+1)).css('backgroundColor','lightgrey');
+       $('.descriptor-' + idArray[1] + '-' + (i+1)).css('backgroundColor','lightgrey');
+       break;
+    }  else if ((RUBRIC.type === 'numeric')&&(scoreArray[i+1])&&(+score < scoreArray[i])&&(+score > scoreArray[i+1])) {
+       $('.score-' + idArray[1] + '-' + i).css('backgroundColor','lightgrey');
+       $('.descriptor-' + idArray[1] + '-' + i).css('backgroundColor','lightgrey');
+       $('.score-' + idArray[1] + '-' + (i+1)).css('backgroundColor','lightgrey');
+       $('.descriptor-' + idArray[1] + '-' + (i+1)).css('backgroundColor','lightgrey');
+       break;
+    } else {
+       $('.score-' + idArray[1] + '-' + i).css('backgroundColor','white');
+       $('.descriptor-' + idArray[1] + '-' + i).css('backgroundColor','white').hover(function() {$(this).addClass("hover")}, function() {$(this).removeClass("hover")});
+    }
+  }
+  $('.skillName-skill-' + idArray[1]).css('backgroundColor','whitesmoke');
+  setSaveScores();
+}
+
+function getMaxOfArray(numArray) {
+    return Math.max.apply(null, numArray);
+}
+
+    
+function setScoreClick() {
+  var idArray = $(this).attr('class').split(' ')[0].split('-'); 
+  var scoreArray = RUBRIC.scale.split("||");
+  for (var i=0; i<COLS; i++) {
+    $('.score-' + idArray[1] + '-' + i)
+    .css({'fontWeight':'normal',
+          'backgroundColor':'white'
+         });
+    $('.descriptor-' + idArray[1] + '-' + i)
+    .css({'fontWeight':'normal',
+          'backgroundColor':'white'
+         });
+    $('.descriptor-' + idArray[1] + '-' + i).unbind('mouseenter mouseleave').hover(function() {$(this).addClass("hover")}, function() {$(this).removeClass("hover")});
+  }
+  $('.descriptor-' + idArray[1] + '-' + idArray[2]).css('backgroundColor','lightgrey');
+  $('.score-' + idArray[1] + '-' + idArray[2]).css('backgroundColor','lightgrey');
+  $('.skillName-skill-' + idArray[1]).css('backgroundColor','whitesmoke');
+  RUBRIC['skill-' + idArray[1]].score = (!isNaN(scoreArray[idArray[2]])) ? +scoreArray[idArray[2]] : scoreArray[idArray[2]];
+  $('.skill-' + idArray[1]).val(RUBRIC['skill-' + idArray[1]].score);
+  setSaveScores();
+}
+    
+    
+function createSkillTable(skill) {
+   var scoreArray = RUBRIC.scale.split("||");
+   var table = '<table class="rubric-table">';
+   var descriptors = skill.scoreDescriptors;
+   table += "<tr>";
+   for (var i=0; i<scoreArray.length; i++) {
+     table+= '<td class="score-' + skill.index + '-' + i + ' rubric-score" width="' + Math.round(100/COLS) + '%">' + scoreArray[i] + '</td>';
+   }
+   table += "</tr><tr>";
+   for (var i=0; i<scoreArray.length; i++) {
+     table+= '<td class="descriptor-' + skill.index + '-' + i + ' rubric-descriptor" width="' + Math.round(100/COLS) + '%"><div class="rubric-descriptor">' + descriptors['score||'+scoreArray[i]] + '</div></td>';
+   }
+   table += "</tr></table>";
+   return table;
+}
+
+
+function createModalRubricTable() {
+  var scoreArray = RUBRIC.scale.split("||");
+  var table = '<div id="waiting-icon-2"></div>';
+  table += '<table id="full-rubric-table">';
+  table += '<thead>';
+  table += '<tr><th width="' + Math.round(100/(COLS+1)) + '%"></th>';
+  for (var i=0; i<scoreArray.length; i++) {
+    table += '<th class="header-' + scoreArray[i] + ' rubric-score">' + scoreArray[i] + '</th>';
+  }
+  table += '</tr>';
+  table += '</thead>';
+  for (var j=0; j<(RUBRIC.rows-1); j++) {
+      var key = 'skill-' + (j+1);
+      table += '<tr>';
+      table += '<td class="skillName-' + key + ' skill-strand">' + RUBRIC[key].skillName + '<br/><input class="' + key + ' score-input" type="text"/></td>';
+      var descriptors = RUBRIC[key].scoreDescriptors;
+      for (var i=0; i<scoreArray.length; i++) {
+        table += '<td class="descriptor-' + RUBRIC[key].index + '-' + i + ' rubric-descriptor-full"><div class="rubric-descriptor-full">' + descriptors['score||' + scoreArray[i]] + '</div></td>';
+      }
+      table += '</tr>';
+  }
+  table += '</table>';
+  return table;
+}
+
+
+function returnDriveKey(url) {
+	var urlArgs = url.split("/");
+	var type = returnType(url, urlArgs);
+	var domain = false;
+	  var id = ''
+	  if (urlArgs.indexOf("a")!=-1) {
+	    domain = true;
+	  }
+  try {
+    if (!domain) {
+      switch(type)
+      {
+        case "DOCUMENT":
+          var key = urlArgs[5];  
+          break;
+        case "SPREADSHEET_OLD":
+          var key = urlArgs[4].split("key=")[1].split("#")[0];
+          break;
+        case "SPREADSHEET_NEW":
+          var key = urlArgs[4].split("key=")[1].split("#")[0];
+          break;
+        case "PRESENTATION":
+          var key = urlArgs[5]; 
+          break;
+        case "DRAWING":
+          var key = urlArgs[5];   
+          break;
+        case "FORM":
+          var key = urlArgs[5];
+          break;
+        case "FOLDER":
+          var key = urlArgs[4];
+          break;
+        case "FOLDER_NEW_DRIVE":
+          var key = urlArgs[4];
+          break;
+        case "FOLDERVIEW":
+          var key = urlArgs[3].split("id=")[1].split("&")[0];   
+          break;
+        case "OTHER":
+          var key = urlArgs[5];
+          break;
+        default:
+          return;
+      }
+    } else {
+      switch(type)
+      {
+        case "DOCUMENT":
+          var key = urlArgs[7]
+          break;
+        case "SPREADSHEET_OLD":
+          var key = urlArgs[6].split("key=")[1].split("#")[0];
+          break;
+        case "SPREADSHEET_NEW":
+          //debugger;
+          var key = urlArgs[7];
+          break;
+        case "PRESENTATION":
+          var key = urlArgs[7]
+          break;
+        case "DRAWING":
+          var key = urlArgs[7]
+          break;
+        case "FORM":
+          var key = urlArgs[7]
+          break;
+        case "FOLDER":
+          var key = urlArgs[6]
+          break;
+        case "FOLDER_NEW_DRIVE":
+          var key = urlArgs[4];
+          break;
+        case "FOLDERVIEW":
+          var key = urlArgs[5].split("id=")[1].split("&")[0]   
+          break;
+        case "OTHER":
+          var key = urlArgs[7]  
+          break;
+        default:
+          return;
+      }
+    }
+    return key; 
+  } catch(err) {
+    return err.message;
+  }
+}
+
+
+
+function returnType(url, urlArgs) {
+  var type = '';
+  if ((url.indexOf("folders")!=-1)&&(url.indexOf("?")!==-1)) {
+    type = "FOLDER";
+  }
+  if ((url.indexOf("folders")!=-1)&&(url.indexOf("?")===-1)) {
+    type = "FOLDER_NEW_DRIVE";
+  }
+  if (url.indexOf("folderview")!=-1) {
+    type = "FOLDERVIEW";
+  }
+  if (urlArgs.indexOf("document")!=-1) {
+    type = "DOCUMENT";
+  }
+  if (urlArgs.indexOf("spreadsheet")!=-1) {
+    type = "SPREADSHEET_OLD";
+  }
+  if (urlArgs.indexOf("spreadsheets")!=-1) {
+    type = "SPREADSHEET_NEW";
+  }
+  if (urlArgs.indexOf("presentation")!=-1) {
+    type = "PRESENTATION";
+  }
+  if (urlArgs.indexOf("drawings")!=-1) {
+    type = "DRAWING";
+  }
+  if (urlArgs.indexOf("forms")!=-1) {
+    type = "FORM";
+  }
+  if (urlArgs.indexOf("file")!=-1) {
+    type = "OTHER";
+  }
+  return type;
+}
+
+function truncate(input, n){
+  try {
+  if (input.length - Math.round(n/2)>0) {
+    return input.substr(0,(Math.round(n/2)-1))+'&hellip;'+input.substr((input.length - Math.round(n/2)), Math.round(n/2)) 
+  } else {
+    return input;
+ }
+ } catch(err) {
+   return input;
+ }
+}
+
+  
+</script>
+<html>
+<head>
+   <base target="_top">
+</head>
+<body>
+<div class="ui-layout-north">
+    <div class="ui-layout-center" id="left-top-panel">
+       <div id="waiting-icon-1"></div>
+       <div id="rubric-container">     
+          <div id="tabs">
+             <ul id="tab-list">
+             </ul>
+          </div>
+          <div id="full-rubric">
+          </div>  
+       </div>
+    </div>
+    <div class="ui-layout-east">
+        <div id="waiting-icon-3"></div>
+        <div id="uploading-to-drive" hidden>Uploading to Drive / sharing...</div>
+        <div id="recording-waiting" hidden>
+            <img id=recording-spinner src="https://storage.googleapis.com/goobric-icons/spinning_record_am.gif" />
+        </div>
+        <div id="button-panel" hidden>
+            <select class="jump"> <!-- We will insert options here... -->                 
+            </select>
+            <div class="comments-container comments">Comments
+                <br/>
+                <textarea class="comment-textarea" rows="3" cols="36"></textarea>
+            </div>
+            <div id="button-container">
+                <button class="prev">&lt;&lt; Prev</button>
+                <button class="submit action">Submit</button>
+                <button class="next">Next &gt;&gt;</button>
+                <div id="new-recording-div" hidden>New audio comments
+                    <table id="new-recordings">
+                    </table>
+                </div>
+                <div id="old-recording-div" hidden>
+                    <div id="old-recording-header"><a href="#">Audio comments from last scoring</a>
+                    </div>
+                    <table id="old-recordings" hidden>
+                    </table>
+                </div>
+                <div id="email-authors-container">
+                    <input class="email-authors" type="checkbox">Also email scores to <span id="author-emails">author(s)</span>
+                </div>
+                <div id="viewer-to-commenter-container" hidden>
+                  <input id="viewer-to-commenter" type="checkbox">Change student(s) from "Can View" to "Can comment" on submit. <span class="hoverbold" title="Student(s) currently have &quot;Can View&quot; status and won't be able to see your inline comments unless we change them to &quot;Can Comment&quot;...">Why?</span>
+                </div>
+                <div id="auto-advance-container">
+                    <input id="auto-advance" type="checkbox">Auto-advance on submit
+                </div>
+            </div>
+        </div>
+        <div id="recording-preview" hidden>
+        </div>
+    </div>
+     <a id="doctopus-link" href="" target="_blank">Doctopus Sheet</a>
+</div>
+<iframe id="docs-editor" class="ui-layout-center" width="100%" height="100%" name="doc" src=""></iframe>
+<div id="saving-info-hover-target">
+    <div id="last-saved-info" hidden></div>
+</div>
+<div id="saving-info" hidden></div>
+<div id="record-pause-stop" hidden>
+     <span id="record" title="Record audio comment"></span>
+     <span id="pause" title="Pause recording"></span>
+     <span id="stop" title="Stop recording"></span>
+</div>
+</body>
+</html>
+
+<?!= include('layout.js'); ?>
+<?!= include('spin.js'); ?>
+<?!= include('fixed-table-header.js'); ?>
